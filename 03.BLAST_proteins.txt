@@ -1,0 +1,31 @@
+# BLASTn - monkey proteins
+conda activate monkey-genomes
+
+## Concatenate all genomic.fna files into a single file
+cd /temporario2/11217468/projects/monkey_proteins/genomes/extracted_genomes/all_fna_files
+cat *_genomic.fna > concat_genomes.fna
+mv concat_genomes.fna /temporario2/11217468/projects/monkey_proteins/
+cd /temporario2/11217468/projects/monkey_proteins/
+
+## Create a BLAST database from the combined file
+mkdir db_monkey_genomes
+makeblastdb -in concat_genomes.fna -dbtype nucl -out monkey_genomes_db
+mv monkey_genomes_db* db_monkey_genomes/ 
+
+## Specifying the path to genomes database
+export BLASTDB=/temporario2/11217468/projects/monkey_proteins/db_monkey_genomes/monkey_genomes_db
+
+## Running blastn on multiple queries
+
+## Setting up the path to our protein sequences and to our genomic database
+protein_dir="/temporario2/11217468/projects/monkey_proteins/proteins"
+genomic_db="/temporario2/11217468/projects/monkey_proteins/db_monkey_genomes/monkey_genomes_db"
+chmod +x  "$protein_dir"/*.fa # to avoid the issue with query not being acessible; if a similar issue persists, run the following code inside query_proteins directory and it should work 
+for protein_file in "${protein_dir}"/*.fa; do
+protein_name=$(basename "$protein_file")
+output_file="/temporario2/11217468/projects/monkey_proteins/blastn_outputs/${protein_name}_hits.tsv"
+blastn -query "$protein_name" -db "$genomic_db" -out "$output_file" -outfmt "6 qseqid sseqid sstart send length pident evalue bitscore sseq"
+done
+
+
+
