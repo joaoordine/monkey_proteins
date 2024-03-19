@@ -17,9 +17,22 @@ done
 cd extracted_genomes
 mkdir all_fna_files
 for dir in GCA_*; do
-    scp /temporario2/11217468/projects/monkey_proteins/genomes/extracted_genomes/"$dir"/ncbi_dataset/data/"$dir"/*.fna all_fna_files
-    echo "Copy of $dir was sent!"
+    scp /temporario2/11217468/projects/monkey_proteins/genomes/extracted_genomes/"$dir"/ncbi_dataset/data/"$dir"/*.fna all_fna_files && 
+    echo "Copy of $dir was sent"
 done
+ls | grep -c GCA_ # 178
 
+## Checking for duplicated files using R
+directory <- "/temporario2/11217468/projects/monkey_proteins/genomes/extracted_genomes/all_fna_files" # set dir path 
+files <- list.files(directory, full.names = TRUE)
+unique_files <- unique(files)
+duplicates <- files[duplicated(files)]
+print(duplicates) # character(0)
+
+## Listing all assemblies used as database 
+unique_files_names <- gsub(".*/GCA_", "GCA_", unique_files) # Extract unique file names without the directory path
+unique_files_names2 <- gsub("_genomic\\.fna", "", unique_files_names) # Removing trailing from genomes names
+unique_files_df <- data.frame(file_name = unique_files_names2) 
+write.table(unique_files_df, file = "/temporario2/11217468/projects/monkey_proteins//unique_assemblies_list.tsv", sep = "\t", row.names = FALSE)
 
 
