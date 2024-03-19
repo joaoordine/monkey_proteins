@@ -219,7 +219,28 @@ curl -OJX GET "https://api.ncbi.nlm.nih.gov/datasets/v2alpha/genome/accession/GC
 curl -OJX GET "https://api.ncbi.nlm.nih.gov/datasets/v2alpha/genome/accession/GCA_963573675.1/download?include_annotation_type=GENOME_FASTA,GENOME_GFF,RNA_FASTA,CDS_FASTA,PROT_FASTA,SEQUENCE_REPORT&filename=GCA_963573675.1.zip" -H "Accept: application/zip"
 curl -OJX GET "https://api.ncbi.nlm.nih.gov/datasets/v2alpha/genome/accession/GCA_963574595.1/download?include_annotation_type=GENOME_FASTA,GENOME_GFF,RNA_FASTA,CDS_FASTA,PROT_FASTA,SEQUENCE_REPORT&filename=GCA_963574595.1.zip" -H "Accept: application/zip"
 
+### Checking how many files were downloaded and moved to genomes directory
+ls | grep -c GCA_ # 183
 
+## Creating a list of all genomes downloaded and one with all genomes Pedro wanted to be included
+ls | grep GCA_ > downloaded_genomes_list.txt # making a list of downloaded genomes
+sed -i 's/\.zip$//' downloaded_genomes_list.txt # removing the extension so we can compare both files 
+vim pedro_genomes_list.txt # pasted the GCA column from excel 
+grep -c GCA_ pedro_genomes_list.txt # 190
+
+## Checking which genomes weren't downloaded
+sort pedro_genomes_list.txt > sorted_pedro_genomes_list.txt
+sort downloaded_genomes_list.txt > sorted_downloaded_genomes_list.txt
+comm -23 sorted_pedro_genomes_list.txt sorted_downloaded_genomes_list.txt 
+
+# Manually downloading remaining genomes 
+https://www.ebi.ac.uk/ena/browser/api/fasta/GCA_963573475.1?download=true&gzip=true
+https://www.ebi.ac.uk/ena/browser/api/fasta/GCA_963573535.1?download=true&gzip=true
+https://www.ebi.ac.uk/ena/browser/api/fasta/GCA_963573675.1?download=true&gzip=true
+https://www.ebi.ac.uk/ena/browser/api/fasta/GCA_963573805.1?download=true&gzip=true
+https://www.ebi.ac.uk/ena/browser/api/fasta/GCA_963574125.1?download=true&gzip=true
+https://www.ebi.ac.uk/ena/browser/api/fasta/GCA_963574595.1?download=true&gzip=true
+https://www.ebi.ac.uk/ena/browser/api/fasta/GCA_963574985.1?download=true&gzip=true
 
 
 
