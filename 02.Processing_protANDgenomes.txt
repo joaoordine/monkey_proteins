@@ -1,0 +1,25 @@
+# Processing protein and genome files before blasting
+
+## Proteins
+vim OXT_human.fa
+vim OTR_human.fa
+vim LNPEP_human.fa # copied and pasted fasta files Pedro sent me, but first I put all base pairs in the same line (they were split in several lines and this gives a lot of trouble later on if unnoticed)
+ 
+## Extracting files 
+mkdir extracted_genomes
+for file in GCA_*.zip; do  # Loop over each zip file
+    dir_name="${file%.zip}"  # Get the directory name by removing the ".zip" extension
+    mkdir "$dir_name"  # Create a directory with the same name as the zip file
+    unzip "$file" -d extracted_genomes/"$dir_name"  # Extract the zip file into the corresponding directory
+done
+
+## Moving all .fna files to a separated directory
+cd extracted_genomes
+mkdir all_fna_files
+for dir in GCA_*; do
+    scp /temporario2/11217468/projects/monkey_proteins/genomes/extracted_genomes/"$dir"/ncbi_dataset/data/"$dir"/*.fna all_fna_files
+    echo "Copy of $dir was sent!"
+done
+
+
+
