@@ -8,4 +8,4 @@ Before blasting selected proteins against the genomes, I corrected their sequenc
 ## Script 02.Processing_protANDgenomes
 
 After processing our queries and the genomes that will form our genomic database, we'll BLAST the protein nucleotide sequences against the genomes downloaded (full list with names and taxonomic assignation of each assembly used to compose our genomic database can be found in the Genomes_DB_list.tsv file). For that, go to 
-## Script 03. 
+## Script 03.BLAST_proteins
