@@ -12,6 +12,9 @@ mkdir db_monkey_genomes
 makeblastdb -in concat_genomes.fna -dbtype nucl -out monkey_genomes_db
 mv monkey_genomes_db* db_monkey_genomes/ 
 
+### If you face errors related to makeblastdb while loading shared libraries: libzstd.so.1, run the following
+conda install conda-forge::zstd
+
 ## Specifying the path to genomes database
 export BLASTDB=/temporario2/11217468/projects/monkey_proteins/db_monkey_genomes/monkey_genomes_db
 
