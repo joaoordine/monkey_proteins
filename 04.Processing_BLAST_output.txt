@@ -1,0 +1,84 @@
+# Filtering BLAST output
+
+## Filtering by e-value (< 0.001) and by sequence lenght - in R 
+### Query lenghts: hLNPEP - 3078 bp; OXT - 378 bp; OXTR - 1170 bp
+getwd() # moved the blast output files here to make it easier
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install()
+
+if (!requireNamespace("Biostrings", quietly = TRUE))
+    BiocManager::install("Biostrings")
+
+library(Biostrings)
+
+### Read BLAST output files
+LNPEP_hits <- read.table("LNPEP_human.fa_hits.tsv", header = FALSE, sep = "\t") 
+OXT_hits <- read.table("OXT_human.fa_hits.tsv", header = FALSE, sep = "\t")
+OXTR_hits <- read.table("OTR_human.fa_hits.tsv", header = FALSE, sep = "\t")
+
+### Define cutoff values
+evalue_cutoff <- 0.001
+lnpep_length_cutoff <- 800
+oxt_length_cutoff <- 200
+oxtr_length_cutoff <- 900
+
+### Filter hits based on e-value and sequence length
+filter_hits <- function(hits, length_cutoff, evalue_cutoff) {
+  hits <- hits[hits$V7 < evalue_cutoff & hits$V5 > length_cutoff, ]
+  return(hits)
+}
+
+lnpep_filtered <- filter_hits(LNPEP_hits, lnpep_length_cutoff, evalue_cutoff)
+oxt_filtered <- filter_hits(OXT_hits, oxt_length_cutoff, evalue_cutoff)
+oxtr_filtered <- filter_hits(OXTR_hits, oxtr_length_cutoff, evalue_cutoff)
+
+### Save filtered results to new files
+write.table(lnpep_filtered, "LNPEP_monkey_filtered.tsv", sep = "\t", quote = FALSE, row.names = FALSE, col.names = FALSE)
+write.table(oxt_filtered, "OXT_monkey_filtered.tsv", sep = "\t", quote = FALSE, row.names = FALSE, col.names = FALSE)
+write.table(oxtr_filtered, "OXTR_monkey_filtered.tsv", sep = "\t", quote = FALSE, row.names = FALSE, col.names = FALSE)
+
+## Filtering to print out only protein codes, genome code and sequence hit 
+library(Biostrings)
+
+### Read filtered BLAST output 
+lnpep_hits <- read.table("LNPEP_monkey_filtered.tsv", header = FALSE, sep = "\t")
+oxt_hits <- read.table("OXT_monkey_filtered.tsv", header = FALSE, sep = "\t")
+oxtr_hits <- read.table("OXTR_monkey_filtered.tsv", header = FALSE, sep = "\t")
+
+### Define function to filter hits and print selected columns
+filter_and_save <- function(hits, header, filename) {
+  filtered_hits <- hits[, c(2, 1, 5, 9)] # Filter columns
+  colnames(filtered_hits) <- header # Add header row
+write.table(filtered_hits, file = filename, sep = "\t", quote = FALSE, row.names = FALSE)
+} # Save filtered hits
+
+### Define header row
+header <- c("Protein_Code", "Genome_Code", "Sequence_Hit")
+
+### Filter and save hits for LNPEP
+filter_and_save(lnpep_hits, header, "LNPEP_monkey_filt_summary.tsv")
+
+### Filter and save hits for OXT
+filter_and_save(oxt_hits, header, "OXT_monkey_filt_summary.tsv")
+
+### Filter and save hits for OXTR
+filter_and_save(oxtr_hits, header, "OXTR_monkey_filt_summary.tsv")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
