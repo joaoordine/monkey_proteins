@@ -55,7 +55,7 @@ write.table(filtered_hits, file = filename, sep = "\t", quote = FALSE, row.names
 } # Save filtered hits
 
 ### Define header row
-header <- c("Protein_Code", "Genome_Code", "Sequence_Hit")
+header <- c("Genome_Code", "Protein_Code", "Lenght", "Sequence_Hit")
 
 ### Filter and save hits for LNPEP
 filter_and_save(lnpep_hits, header, "LNPEP_monkey_filt_summary.tsv")
