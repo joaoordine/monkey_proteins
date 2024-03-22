@@ -9,3 +9,6 @@ Before blasting selected proteins against the genomes, I corrected their sequenc
 
 After processing our queries and the genomes that will form our genomic database, we'll BLAST the protein nucleotide sequences against the genomes downloaded (full list with names and taxonomic assignation of each assembly used to compose our genomic database can be found in the Genomes_DB_list.tsv file). For that, go to 
 ## Script 03.BLAST_proteins
+
+After BLASTing our proteins of interest against the monkey genomes, we'll separate short hits from large hits, as well as only consider those results whose e-value is smaller than 0.001. For that, go to 
+## Script 04. Processing_BLAST_output
